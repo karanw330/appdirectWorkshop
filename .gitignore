@@ -10,7 +10,7 @@ build/
 # Environment variables
 .env
 .env.local
-serviceAccountKey.json
+service-account.json
 
 # IDE
 .vscode/
