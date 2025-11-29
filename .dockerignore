@@ -4,7 +4,7 @@ npm-debug.log
 .gitignore
 .env
 .env.local
-serviceAccountKey.json
+service-account.json
 dist
 .vscode
 .idea
