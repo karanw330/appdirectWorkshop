@@ -31,8 +31,9 @@ func setupIntegrationTest(t *testing.T) (*Handlers, func()) {
 		serviceAccountPath = "./serviceAccountKey.json"
 	}
 
+	databaseID := os.Getenv("FIRESTORE_DATABASE_ID")
 	ctx := context.Background()
-	fsClient, err := firestore.NewClient(ctx, projectID, serviceAccountPath)
+	fsClient, err := firestore.NewClient(ctx, projectID, databaseID, serviceAccountPath)
 	require.NoError(t, err)
 
 	handler := NewHandlers(fsClient, "test_collection")

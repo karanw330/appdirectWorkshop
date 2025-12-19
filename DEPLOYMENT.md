@@ -59,7 +59,7 @@ gcloud run deploy appdirect-workshop \
   --platform managed \
   --region us-central1 \
   --allow-unauthenticated \
-  --set-env-vars FIREBASE_PROJECT_ID=your-project-id,PORT=8080,FIRESTORE_SUBCOLLECTION_ID=workshop_attendees,ADMIN_PASSWORD=your-password,FIREBASE_SERVICE_ACCOUNT_PATH=ADC
+  --set-env-vars FIREBASE_PROJECT_ID=your-project-id,PORT=8080,FIRESTORE_SUBCOLLECTION_ID=workshop_attendees,ADMIN_PASSWORD=your-password,FIREBASE_SERVICE_ACCOUNT_PATH=ADC,FIRESTORE_DATABASE_ID=(default)
 ```
 
 #### 4. Set Environment Variables
@@ -78,6 +78,7 @@ gcloud run services update appdirect-workshop \
 - `PORT`: Server port (default: 8080)
 - `ADMIN_PASSWORD`: Password for admin login (required)
 - `FIRESTORE_SUBCOLLECTION_ID`: Firestore collection ID (default: workshop_attendees)
+- `FIRESTORE_DATABASE_ID`: Database ID if using named database (default: (default))
 
 ### Local Testing with Docker
 

@@ -79,7 +79,7 @@ func main() {
 			serviceAccountPath = "ADC"
 		} else {
 			// Local development, try to use service account file
-			serviceAccountPath = "./serviceAccountKey.json"
+			serviceAccountPath = serviceAccountPath
 		}
 	}
 
@@ -89,8 +89,10 @@ func main() {
 	}
 
 	// Initialize Firestore client
+	databaseID := os.Getenv("FIRESTORE_DATABASE_ID")
+	log.Printf("DEBUG: FIRESTORE_DATABASE_ID is: '%s'", databaseID)
 	ctx := context.Background()
-	fsClient, err := firestore.NewClient(ctx, projectID, serviceAccountPath)
+	fsClient, err := firestore.NewClient(ctx, projectID, databaseID, serviceAccountPath)
 	if err != nil {
 		log.Fatalf("Failed to initialize Firestore: %v", err)
 	}

@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"cloud.google.com/go/firestore"
-	firebase "firebase.google.com/go/v4"
 	"google.golang.org/api/option"
 )
 
@@ -17,33 +16,32 @@ type Client struct {
 // NewClient creates a new Firestore client
 // For local development: uses service account file
 // For Cloud Run: uses Application Default Credentials (ADC)
-func NewClient(ctx context.Context, projectID, serviceAccountPath string) (*Client, error) {
-	var app *firebase.App
+func NewClient(ctx context.Context, projectID, databaseID, serviceAccountPath string) (*Client, error) {
+	var client *firestore.Client
 	var err error
 
-	// Check if we're running in Cloud Run (or using ADC)
-	// If serviceAccountPath is empty or "ADC", use Application Default Credentials
-	if serviceAccountPath == "" || serviceAccountPath == "ADC" {
-		log.Println("Using Application Default Credentials (ADC)")
-		app, err = firebase.NewApp(ctx, &firebase.Config{
-			ProjectID: projectID,
-		})
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		// Use service account file for local development
+	// If using default database, we can keep it simple or unify the logic.
+	// However, firebase.NewApp doesn't easily expose WithDatabase. 
+	// So we switch to using the firestore client directly which supports it more transparently,
+	// or we use the specific constructor if available. 
+	// Given the potential dependency versions, let's try to construct it with options.
+
+	opts := []option.ClientOption{}
+	
+	if serviceAccountPath != "" && serviceAccountPath != "ADC" {
 		log.Printf("Using service account file: %s", serviceAccountPath)
-		opt := option.WithCredentialsFile(serviceAccountPath)
-		app, err = firebase.NewApp(ctx, &firebase.Config{
-			ProjectID: projectID,
-		}, opt)
-		if err != nil {
-			return nil, err
-		}
+		opts = append(opts, option.WithCredentialsFile(serviceAccountPath))
+	} else {
+		log.Println("Using Application Default Credentials (ADC)")
 	}
 
-	client, err := app.Firestore(ctx)
+	if databaseID != "" && databaseID != "(default)" {
+		log.Printf("Connecting to specific database: %s", databaseID)
+		client, err = firestore.NewClientWithDatabase(ctx, projectID, databaseID, opts...)
+	} else {
+		client, err = firestore.NewClient(ctx, projectID, opts...)
+	}
+
 	if err != nil {
 		return nil, err
 	}

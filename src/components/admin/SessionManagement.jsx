@@ -26,8 +26,8 @@ function SessionManagement() {
         sessionsAPI.getAll(),
         speakersAPI.getAll(),
       ])
-      setSessions(sessionsRes.data)
-      setSpeakers(speakersRes.data)
+      setSessions(sessionsRes.data || [])
+      setSpeakers(speakersRes.data || [])
     } catch (error) {
       console.error('Error fetching data:', error)
     } finally {

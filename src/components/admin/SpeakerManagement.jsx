@@ -16,7 +16,7 @@ function SpeakerManagement() {
   const fetchSpeakers = async () => {
     try {
       const response = await speakersAPI.getAll()
-      setSpeakers(response.data)
+      setSpeakers(response.data || [])
     } catch (error) {
       console.error('Error fetching speakers:', error)
     } finally {

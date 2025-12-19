@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useAuth } from '../context/AuthContext'
 import { adminAPI } from '../services/api'
 import { Lock, XCircle } from 'lucide-react'
 
@@ -8,6 +9,7 @@ function AdminLogin() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const { login } = useAuth()
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -17,6 +19,7 @@ function AdminLogin() {
 
     try {
       await adminAPI.login(password)
+      login() // Update auth context state
       navigate('/admin/dashboard')
     } catch (error) {
       setError(
