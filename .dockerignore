@@ -5,6 +5,7 @@ npm-debug.log
 .env
 .env.local
 service-account.json
+serviceAccountKey.json
 dist
 .vscode
 .idea

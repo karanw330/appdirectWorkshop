@@ -11,6 +11,7 @@ build/
 .env
 .env.local
 service-account.json
+serviceAccountKey.json
 
 # IDE
 .vscode/
